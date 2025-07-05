@@ -4,6 +4,7 @@ import React, {ReactNode} from "react"
 import {Metadata} from "next"
 import {CLIENT_URL} from "@/tools/constants"
 import {Analytics} from "@vercel/analytics/next"
+import {GoogleAnalytics} from "@next/third-parties/google"
 
 const notable = Notable({
     variable: "--font-notable",
@@ -109,6 +110,8 @@ export default function AppLayout({children}: Readonly<{ children: ReactNode }>)
     return (
         <html lang={"en"} suppressHydrationWarning>
             <Analytics/>
+
+            <GoogleAnalytics gaId={"G-073WMB8LQQ"}/>
 
             <body className={
                 `${notable.variable} ${limelight.variable} ${fascinate.variable} ${delius.variable} ${comfortaa.variable} antialiased`
