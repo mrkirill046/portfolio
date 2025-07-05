@@ -109,8 +109,27 @@ export const metadata: Metadata = {
 export default function AppLayout({children}: Readonly<{ children: ReactNode }>) {
     return (
         <html lang={"en"} suppressHydrationWarning>
-            <Analytics/>
+            <head>
+                <script
+                    dangerouslySetInnerHTML={{
+                        __html: `
+                            (function() {
+                                try {
+                                    const theme = localStorage.getItem('theme')
+                                    
+                                    if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                                        document.documentElement.classList.add('dark')
+                                    } else {
+                                        document.documentElement.classList.add('light')
+                                    }
+                                } catch (_) {}
+                            })()
+                        `,
+                    }}
+                />
+            </head>
 
+            <Analytics/>
             <GoogleAnalytics gaId={"G-073WMB8LQQ"}/>
 
             <body className={

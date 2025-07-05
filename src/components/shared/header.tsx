@@ -11,6 +11,60 @@ import {
 } from "@/components/ui/navigation-menu"
 import Link from "next/link"
 import Image from "next/image"
+import {SoundToggle} from "@/components/shared/sound-toggle"
+import {MobileMenu} from "@/components/shared/mobile-menu"
+
+type Component = {
+    title: string
+    href: string
+    description: string
+}
+
+const categories: Component[] = [
+    {
+        title: "Web Development",
+        description: "Articles about frontend, backend, and fullstack",
+        href: "/blog/categories/web-development"
+    },
+    {
+        title: "Programming Tips",
+        description: "Best practices, coding tricks, and productivity hacks",
+        href: "/blog/categories/programming-tips"
+    },
+    {
+        title: "Tech Reviews",
+        description: "Insights and reviews of tools and technologies",
+        href: "/blog/categories/tech-reviews"
+    },
+    {
+        title: "Personal Growth",
+        description: "Thoughts on learning, career, mindset, and success",
+        href: "/blog/categories/personal-growth"
+    }
+]
+
+const goodies: Component[] = [
+    {
+        title: "Shadow Generator",
+        description: "Create beautiful shadows with ease",
+        href: "/goodies/shadow-generator"
+    },
+    {
+        title: "Gradient Creator",
+        description: "Design smooth gradients effortlessly",
+        href: "/goodies/gradient-creator"
+    },
+    {
+        title: "Color Palette Picker",
+        description: "Find perfect color combos fast",
+        href: "/goodies/color-palette-picker"
+    },
+    {
+        title: "Font Pairing Guide",
+        description: "Match fonts for modern design",
+        href: "/goodies/font-pairing-guide"
+    }
+]
 
 interface Props {
     className?: string
@@ -18,16 +72,23 @@ interface Props {
 
 export const Header: React.FC<Props> = ({className}) => {
     return (
-        <header className={cn(className, "")}>
-            <NavigationMenu viewport={false}>
+        <header className={cn(className,
+            "fixed top-0 left-0 right-0 z-50 flex items-center px-4 py-3 pb-4 pt-4 backdrop-blur-lg bg-background/80 drop-shadow-lg"
+        )}>
+            <div className="flex items-center flex-shrink-0">
+                <MobileMenu className={"flex lg:hidden"}/>
+            </div>
+
+            <NavigationMenu viewport={false} className={"hidden lg:flex items-center space-x-4 min-w-48"}>
                 <NavigationMenuList>
                     <NavigationMenuItem>
-                        <NavigationMenuTrigger>
+                        <NavigationMenuTrigger
+                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}>
                             Home
                         </NavigationMenuTrigger>
 
                         <NavigationMenuContent>
-                            <ul className={"grid gap-2 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]"}>
+                            <ul className={"grid gap-2 md:w-[25rem] lg:w-[31.25rem] lg:grid-cols-[.75fr_1fr]"}>
                                 <li className={"row-span-3"}>
                                     <NavigationMenuLink asChild>
                                         <Link
@@ -70,10 +131,66 @@ export const Header: React.FC<Props> = ({className}) => {
                             </ul>
                         </NavigationMenuContent>
                     </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger
+                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}>
+                            Goodies
+                        </NavigationMenuTrigger>
+
+                        <NavigationMenuContent>
+                            <ul className={"grid w-[25rem] gap-2 md:w-[31.25rem] md:grid-cols-2 lg:w-[37.5rem]"}>
+                                {goodies.map((component) => (
+                                    <ListItem
+                                        key={component.title}
+                                        title={component.title}
+                                        href={component.href}
+                                    >
+                                        {component.description}
+                                    </ListItem>
+                                ))}
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
+
+                    <NavigationMenuItem>
+                        <NavigationMenuTrigger
+                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}>
+                            Categories
+                        </NavigationMenuTrigger>
+
+                        <NavigationMenuContent>
+                            <ul className={"grid w-[25rem] gap-2 md:w-[31.25rem] md:grid-cols-2 lg:w-[37.5rem]"}>
+                                {categories.map((component) => (
+                                    <ListItem
+                                        key={component.title}
+                                        title={component.title}
+                                        href={component.href}
+                                    >
+                                        {component.description}
+                                    </ListItem>
+                                ))}
+                            </ul>
+                        </NavigationMenuContent>
+                    </NavigationMenuItem>
                 </NavigationMenuList>
             </NavigationMenu>
 
-            <ThemeToggle/>
+            <div className={
+                "sm:absolute sm:left-1/2 sm:top-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2 pointer-events-none select-none " +
+                "flex-grow flex justify-center text-center"
+            }>
+                <h1 className={"text-lg sm:text-xl font-bold uppercase md:text-2xl sm:whitespace-nowrap leading-4 sm:leading-none"}>
+                    kazuha046 portfolio
+                </h1>
+            </div>
+
+            <div className={
+                "sm:absolute sm:right-4 sm:top-1/2 sm:transform sm:-translate-y-1/2 flex items-center space-x-1 min-w-24 justify-end"
+            }>
+                <SoundToggle/>
+                <ThemeToggle/>
+            </div>
         </header>
     )
 }

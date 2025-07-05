@@ -8,7 +8,7 @@ export default function RootLayout({children}: Readonly<{ children: ReactNode }>
         <Providers>
             <Header/>
 
-            <main>
+            <main className={"mt-20"}>
                 {children}
             </main>
 
