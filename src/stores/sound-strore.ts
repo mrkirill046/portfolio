@@ -10,6 +10,7 @@ class SoundStore {
 
     hydrate() {
         const saved = localStorage.getItem("sound_enabled")
+
         if (saved !== null) {
             runInAction(() => {
                 this.soundEnabled = JSON.parse(saved)
@@ -23,10 +24,6 @@ class SoundStore {
     toggleSound() {
         this.soundEnabled = !this.soundEnabled
         this.save()
-    }
-
-    get volume() {
-        return this.soundEnabled ? 1 : 0
     }
 
     save() {

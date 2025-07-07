@@ -1,4 +1,6 @@
-import React from "react"
+"use client"
+
+import React, {useEffect, useRef, useState} from "react"
 import {cn} from "@/lib/utils"
 import {ThemeToggle} from "@/components/shared/theme-toggle"
 import {
@@ -13,6 +15,9 @@ import Link from "next/link"
 import Image from "next/image"
 import {SoundToggle} from "@/components/shared/sound-toggle"
 import {MobileMenu} from "@/components/shared/mobile-menu"
+import {observer} from "mobx-react-lite"
+import useSound from "use-sound"
+import {soundStore} from "@/stores/sound-strore"
 
 type Component = {
     title: string
@@ -70,7 +75,32 @@ interface Props {
     className?: string
 }
 
-export const Header: React.FC<Props> = ({className}) => {
+export const Header: React.FC<Props> = observer(({className}) => {
+    const [open, setOpen] = useState<string>("")
+
+    const [playOn] = useSound("/sounds/menu-open-softer.mp3", {
+        soundEnabled: soundStore.soundEnabled
+    })
+
+    const [playOff] = useSound("/sounds/menu-close.mp3", {
+        soundEnabled: soundStore.soundEnabled
+    })
+
+    const prevOpenRef = useRef<string>("")
+
+    useEffect(() => {
+        const prevOpen = prevOpenRef.current
+        const currOpen = open
+
+        if (prevOpen === "" && currOpen !== "") {
+            playOn()
+        } else if (prevOpen !== "" && currOpen === "") {
+            playOff()
+        }
+
+        prevOpenRef.current = currOpen
+    }, [open, playOn, playOff])
+
     return (
         <header className={cn(className,
             "fixed top-0 left-0 right-0 z-50 flex items-center px-4 py-3 pb-4 pt-4 backdrop-blur-lg bg-background/80 drop-shadow-lg"
@@ -79,11 +109,13 @@ export const Header: React.FC<Props> = ({className}) => {
                 <MobileMenu className={"flex lg:hidden"}/>
             </div>
 
-            <NavigationMenu viewport={false} className={"hidden lg:flex items-center space-x-4 min-w-48"}>
+            <NavigationMenu viewport={false} className={"hidden lg:flex items-center space-x-4 min-w-48"} value={open}
+                            onValueChange={setOpen}>
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
-                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}>
+                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}
+                        >
                             Home
                         </NavigationMenuTrigger>
 
@@ -134,7 +166,8 @@ export const Header: React.FC<Props> = ({className}) => {
 
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
-                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}>
+                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}
+                        >
                             Goodies
                         </NavigationMenuTrigger>
 
@@ -155,7 +188,8 @@ export const Header: React.FC<Props> = ({className}) => {
 
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
-                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}>
+                            className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}
+                        >
                             Categories
                         </NavigationMenuTrigger>
 
@@ -193,7 +227,7 @@ export const Header: React.FC<Props> = ({className}) => {
             </div>
         </header>
     )
-}
+})
 
 function ListItem(
     {

@@ -25,15 +25,22 @@ export const SoundToggle: React.FC<Props> = observer(({className}) => {
     const crossRef = useRef<SVGGElement>(null)
     const isAnimatingRef = useRef(false)
 
-    const [play] = useSound("/sounds/button.wav", {
-        volume: soundStore.volume,
-        interrupt: true
+    const [playOn] = useSound("/sounds/enable-sound.mp3", {
+        volume: 0.4
+    })
+
+    const [playOff] = useSound("/sounds/disable-sound.mp3", {
+        volume: 0.25
     })
 
     const handleClick = () => {
         if (isAnimatingRef.current) return
 
-        play()
+        if (soundStore.soundEnabled) {
+            playOff()
+        } else {
+            playOn()
+        }
 
         isAnimatingRef.current = true
 
@@ -65,6 +72,7 @@ export const SoundToggle: React.FC<Props> = observer(({className}) => {
         }
 
         setIsMuted(!isMuted)
+
         soundStore.toggleSound()
     }
 

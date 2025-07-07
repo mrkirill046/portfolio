@@ -27,9 +27,12 @@ export const ThemeToggle: React.FC<Props> = observer((
     const buttonRef = useRef<HTMLButtonElement>(null)
     const isAnimatingRef = useRef(false)
 
-    const [play] = useSound("/sounds/button.wav", {
-        volume: soundStore.volume,
-        interrupt: true
+    const [playOn] = useSound("/sounds/switch-on.mp3", {
+        soundEnabled: soundStore.soundEnabled
+    })
+
+    const [playOff] = useSound("/sounds/switch-off.mp3", {
+        soundEnabled: soundStore.soundEnabled
     })
 
     useEffect(() => {
@@ -43,7 +46,11 @@ export const ThemeToggle: React.FC<Props> = observer((
     const handleClick = () => {
         if (isAnimatingRef.current) return
 
-        play()
+        if (resolvedTheme === "light") {
+            playOn()
+        } else {
+            playOff()
+        }
 
         isAnimatingRef.current = true
 
