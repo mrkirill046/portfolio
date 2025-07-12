@@ -103,14 +103,18 @@ export const Header: React.FC<Props> = observer(({className}) => {
 
     return (
         <header className={cn(className,
-            "fixed top-0 left-0 right-0 z-50 flex items-center px-4 py-3 pb-4 pt-4 backdrop-blur-lg bg-background/80 drop-shadow-lg"
+            "fixed top-0 left-0 right-0 z-30 flex items-center px-4 py-3 pb-4 pt-4 backdrop-blur-lg bg-background/80 drop-shadow-lg"
         )}>
             <div className="flex items-center flex-shrink-0">
                 <MobileMenu className={"flex lg:hidden"}/>
             </div>
 
-            <NavigationMenu viewport={false} className={"hidden lg:flex items-center space-x-4 min-w-48"} value={open}
-                            onValueChange={setOpen}>
+            <NavigationMenu
+                viewport={false}
+                className={"hidden lg:flex items-center space-x-4 min-w-48"}
+                value={open}
+                onValueChange={setOpen}
+            >
                 <NavigationMenuList>
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
