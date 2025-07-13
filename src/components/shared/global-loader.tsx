@@ -25,6 +25,7 @@ interface Props {
     className?: string
 }
 
+// TODO: тупая идея, но пока что не придумал как сделать нормально
 export const GlobalLoader: React.FC<Props> = ({className}) => {
     const [windowLoaded, setWindowLoaded] = useState(false)
     const [fontsLoaded, setFontsLoaded] = useState(false)

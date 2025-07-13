@@ -1,13 +1,13 @@
 "use client"
 
-import React, {useEffect, useRef, useState} from "react"
+import React, {useEffect, useState} from "react"
 import {useTheme} from "next-themes"
 import {cn} from "@/lib/utils"
 import {Moon, Sun} from "lucide-react"
 import useSound from "use-sound"
 import {soundStore} from "@/stores/sound-strore"
 import {observer} from "mobx-react-lite"
-import {animate} from "motion"
+import {motion, useAnimate} from "motion/react"
 
 interface Props {
     className?: string
@@ -23,28 +23,21 @@ export const ThemeToggle: React.FC<Props> = observer((
     const {setTheme, resolvedTheme} = useTheme()
 
     const [mounted, setMounted] = useState(false)
+    const [isAnimating, setIsAnimating] = useState(false)
 
-    const buttonRef = useRef<HTMLButtonElement>(null)
-    const isAnimatingRef = useRef(false)
+    const [btnRef, animateBtn] = useAnimate()
 
-    const [playOn] = useSound("/sounds/switch-on.mp3", {
-        soundEnabled: soundStore.soundEnabled
-    })
-
-    const [playOff] = useSound("/sounds/switch-off.mp3", {
-        soundEnabled: soundStore.soundEnabled
-    })
+    const [playOn] = useSound("/sounds/switch-on.mp3", {soundEnabled: soundStore.soundEnabled})
+    const [playOff] = useSound("/sounds/switch-off.mp3", {soundEnabled: soundStore.soundEnabled})
 
     useEffect(() => {
         setMounted(true)
     }, [])
 
-    if (!mounted) {
-        return null
-    }
+    if (!mounted) return null
 
     const handleClick = () => {
-        if (isAnimatingRef.current) return
+        setIsAnimating(true)
 
         if (resolvedTheme === "light") {
             playOn()
@@ -52,52 +45,34 @@ export const ThemeToggle: React.FC<Props> = observer((
             playOff()
         }
 
-        isAnimatingRef.current = true
-
-        if (buttonRef.current) {
-            animate(buttonRef.current, {
-                transform: [
-                    "scale(1) rotate(0deg)",
-                    "scale(1.3) rotate(15deg)",
-                    "scale(1) rotate(0deg)"
-                ]
-            }, {
-                duration: 0.5,
-                ease: "easeInOut",
-                onComplete: () => {
-                    isAnimatingRef.current = false
-                }
-            })
-        }
+        animateBtn(btnRef.current, {
+            scale: [1, 1.3, 1],
+            rotate: [0, 15, 0]
+        }, {duration: 0.5, ease: "easeInOut"})
 
         setTheme(resolvedTheme === "dark" ? "light" : "dark")
+        setTimeout(() => setIsAnimating(false), 500)
     }
 
     const handleHover = () => {
-        if (isAnimatingRef.current) return
+        if (isAnimating) return
 
-        if (buttonRef.current) {
-            animate(buttonRef.current, {
-                transform: [
-                    "scale(1) rotate(0deg)",
-                    "scale(1.1) rotate(-6deg)",
-                    "scale(0.9) rotate(4deg)",
-                    "scale(1.05) rotate(-2deg)",
-                    "scale(1) rotate(0deg)"
-                ]
-            }, {duration: 0.5, ease: "easeInOut"})
-        }
+        animateBtn(btnRef.current, {
+            scale: [1, 1.1, 0.9, 1.05, 1],
+            rotate: [0, -6, 4, -2, 0]
+        }, {duration: 0.5, ease: "easeInOut"})
     }
 
     return (
-        <button
-            ref={buttonRef}
-            className={cn(className, "p-2 bg-buttons rounded")}
+        <motion.button
+            ref={btnRef}
             onClick={handleClick}
             onMouseEnter={handleHover}
             aria-label={"Toggle theme"}
+            type={"button"}
+            className={cn(className, "p-2 bg-buttons rounded cursor-pointer")}
         >
             {resolvedTheme === "light" ? <Sun className={svgStyle}/> : <Moon className={svgStyle}/>}
-        </button>
+        </motion.button>
     )
 })

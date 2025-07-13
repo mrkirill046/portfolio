@@ -1,37 +1,57 @@
 "use client"
 
+import {motion, useAnimate} from "motion/react"
+import {useCallback, useEffect} from "react"
+
 export default function HomePage() {
+    const [scope, animate] = useAnimate()
+
+    useEffect(() => {
+        animate(scope.current, {rotate: [0, -5, 5, -5, 5, 0]}, {
+            duration: 0.8,
+            ease: "easeInOut"
+        })
+    }, [animate, scope])
+
+    const handleHover = useCallback(() => {
+        animate(scope.current, {rotate: [0, -5, 5, -5, 5, 0]}, {
+            duration: 0.8,
+            ease: "easeInOut"
+        })
+    }, [animate, scope])
+
     return (
-        <div className={"text-4xl"}>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae, dolores eius odit omnis possimus
-            recusandae voluptas! Blanditiis deserunt dolor magni odio odit placeat provident quisquam sint. Commodi
-            corporis deserunt est et hic ipsam, ipsum itaque iusto quia, quisquam reiciendis repellat, velit? Expedita
-            incidunt iusto laboriosam laudantium odit, officiis qui sapiente sequi vitae voluptate! Illo magni,
-            reprehenderit? A architecto assumenda at consequatur doloremque earum eius eligendi ex ipsa libero nam natus
-            nulla, odit officia pariatur provident reprehenderit ullam! Ab alias aut cumque deleniti, deserunt dolorem
-            ducimus eligendi facilis fugiat id maxime nisi numquam placeat qui ratione recusandae repellendus sed,
-            temporibus voluptas voluptatem! Aliquid dicta ea eaque, illo iure, labore nulla obcaecati perspiciatis
-            possimus praesentium, quam quis sapiente temporibus ullam vero! Accusamus beatae blanditiis deleniti dolor
-            eligendi reprehenderit! Quaerat ratione, soluta! Alias, blanditiis consectetur dicta dignissimos dolor eaque
-            eligendi eos, est et explicabo harum illo illum iure maxime modi molestiae, nam nisi officia omnis quaerat
-            quasi quisquam reprehenderit sunt tempore totam unde voluptatum? Asperiores dicta ducimus fugiat hic
-            laboriosam laborum neque quas rem. Dicta earum, explicabo odit pariatur tempore tenetur unde! Alias cumque
-            cupiditate dolore excepturi hic id in itaque laborum minima minus natus necessitatibus, nobis odit officiis
-            optio porro provident quaerat quam ratione recusandae tempore velit veniam. A adipisci alias aliquam amet
-            architecto aut commodi, corporis cum cumque debitis dicta illo incidunt, ipsam ipsum iure iusto labore
-            laborum maiores minima natus necessitatibus neque officiis perspiciatis praesentium provident ratione
-            repudiandae sint sunt velit vero? Ad deleniti eligendi est modi molestias optio quo quod recusandae.
-            Aspernatur deserunt doloremque eius eligendi, esse excepturi incidunt inventore laborum laudantium nihil non
-            pariatur ratione, repellat similique suscipit, tempora velit veniam vero? Animi esse facilis hic libero
-            quasi. Architecto assumenda cumque magnam obcaecati reprehenderit voluptatum. A architecto assumenda at
-            atque aut consequatur culpa cum deleniti deserunt distinctio dolore enim esse et eveniet facilis hic illum
-            inventore magni maxime minima nesciunt numquam obcaecati pariatur possimus quaerat quidem quo rerum saepe
-            sapiente, sequi suscipit totam vero voluptate? Adipisci cumque exercitationem impedit quae ratione. Aliquid
-            aspernatur iusto voluptate. Asperiores corporis culpa deleniti distinctio dolor ea et exercitationem
-            explicabo fugiat illum laborum laudantium libero maiores, minima modi mollitia nemo nisi officiis optio quia
-            quod similique tempore, tenetur velit, voluptatem! At dolore dolorem maxime saepe suscipit. Aspernatur
-            debitis deleniti dicta dolor dolore dolorem esse ipsam ipsum labore, libero nihil nulla provident quae qui
-            quis ratione saepe similique temporibus voluptatem voluptatum. Explicabo, facilis, modi!
-        </div>
+        <section className={"grid grid-cols-1 md:grid-cols-2 min-h-screen p-6 gap-8 items-center"}>
+            <div className={"relative w-full h-[400px]"}>
+
+            </div>
+
+            <div className={"space-y-4"}>
+                <motion.h2
+                    className={"text-4xl font-bold font-fascinate flex gap-2 items-center origin-left"}
+                    ref={scope}
+                >
+                    <motion.span
+                        whileHover={{scale: 1.2}}
+                        onHoverStart={handleHover}
+                        className={"cursor-pointer"}
+                    >
+                        👋
+                    </motion.span>
+
+                    <span>Hey! I&apos;m Kirill</span>
+                </motion.h2>
+
+                <h2 className={"text-6xl font-bold"}>
+                    I&apos;m a frontend developer who really cares.
+                </h2>
+                <h2 className={"text-xl"}>
+                    I build for the web with style, clarity, and passion.
+                </h2>
+                <h2 className={"text-2xl"}>
+                    I&apos;m building my future line by line — and I can help build something awesome for you too.
+                </h2>
+            </div>
+        </section>
     )
 }

@@ -6,7 +6,7 @@ import Link from "next/link"
 import {observer} from "mobx-react-lite"
 import useSound from "use-sound"
 import {soundStore} from "@/stores/sound-strore"
-import {animate} from "motion"
+import {motion, useAnimate} from "motion/react"
 
 const menuItems = [
     {title: "Home", href: "/#top"},
@@ -24,27 +24,34 @@ interface Props {
 export const MobileMenu: React.FC<Props> = observer(({className}) => {
     const [open, setOpen] = useState(false)
 
-    const topRef = useRef<SVGRectElement>(null)
-    const middleRef = useRef<SVGRectElement>(null)
-    const bottomRef = useRef<SVGRectElement>(null)
     const wasOpen = useRef(false)
 
-    const [play] = useSound("/sounds/glug-b.mp3", {
-        volume: 0.25,
-        soundEnabled: soundStore.soundEnabled
-    })
+    const [topRef, animateTop] = useAnimate()
+    const [middleRef, animateMiddle] = useAnimate()
+    const [bottomRef, animateBottom] = useAnimate()
+
+    const [play] = useSound("/sounds/glug-b.mp3", {volume: 0.25, soundEnabled: soundStore.soundEnabled})
 
     const handleHover = () => {
-        if (topRef.current && middleRef.current && bottomRef.current) {
-            const allLines = [topRef.current, middleRef.current, bottomRef.current]
+        requestAnimationFrame(() => {
+            if (!topRef.current || !middleRef.current || !bottomRef.current) return
 
-            allLines.forEach((line, i) => {
-                animate(line,
-                    {x: [0, 3, -3, 2, -2, 0]},
-                    {duration: 0.4, delay: i * 0.05, ease: "easeInOut"}
-                )
-            })
-        }
+            animateTop(topRef.current, {
+                x: [0, 3, -3, 2, -2, 0]
+            }, {duration: 0.4, ease: "easeInOut"})
+
+            setTimeout(() => {
+                animateMiddle(middleRef.current!, {
+                    x: [0, 3, -3, 2, -2, 0]
+                }, {duration: 0.4, ease: "easeInOut"})
+            }, 50)
+
+            setTimeout(() => {
+                animateBottom(bottomRef.current!, {
+                    x: [0, 3, -3, 2, -2, 0]
+                }, {duration: 0.4, ease: "easeInOut"})
+            }, 100)
+        })
     }
 
     useEffect(() => {
@@ -52,7 +59,6 @@ export const MobileMenu: React.FC<Props> = observer(({className}) => {
             wasOpen.current = true
         } else if (wasOpen.current) {
             play()
-
             wasOpen.current = false
         }
     }, [open, play])
@@ -63,18 +69,43 @@ export const MobileMenu: React.FC<Props> = observer(({className}) => {
                 <SheetTrigger asChild>
                     <button
                         className={
-                            "lg:hidden w-10 h-10 items-center justify-center flex transition-opacity duration-300 " +
+                            "lg:hidden w-10 h-10 flex items-center justify-center transition-opacity duration-300 " +
                             "ease-in-out hover:opacity-80"
                         }
                         onMouseEnter={handleHover}
                         onClick={() => play()}
+                        aria-label={"Toggle Menu"}
+                        type={"button"}
                     >
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect ref={topRef} x="3" y="6" width="18" height="2" rx="1" fill="currentColor"/>
-                            <rect ref={middleRef} x="3" y="11" width="18" height="2" rx="1" fill="currentColor"/>
-                            <rect ref={bottomRef} x="3" y="16" width="18" height="2" rx="1" fill="currentColor"/>
+                        <svg width={"24"} height={"24"} viewBox={"0 0 24 24"} fill={"none"}>
+                            <motion.rect
+                                ref={topRef}
+                                x={"3"}
+                                y={"6"}
+                                width={"18"}
+                                height={"2"}
+                                rx={"1"}
+                                fill={"currentColor"}
+                            />
+                            <motion.rect
+                                ref={middleRef}
+                                x={"3"}
+                                y={"11"}
+                                width={"18"}
+                                height={"2"}
+                                rx={"1"}
+                                fill={"currentColor"}
+                            />
+                            <motion.rect
+                                ref={bottomRef}
+                                x={"3"}
+                                y={"16"}
+                                width={"18"}
+                                height={"2"}
+                                rx={"1"}
+                                fill={"currentColor"}
+                            />
                         </svg>
-
                         <span className={"sr-only"}>Toggle Menu</span>
                     </button>
                 </SheetTrigger>

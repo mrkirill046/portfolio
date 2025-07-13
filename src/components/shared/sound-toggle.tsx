@@ -1,40 +1,58 @@
 "use client"
 
-import React, {useEffect, useRef, useState} from "react"
+import React, {useCallback, useEffect, useState} from "react"
 import {Volume} from "lucide-react"
-import {animate} from "motion"
-import {clsx} from "clsx"
 import {cn} from "@/lib/utils"
 import useSound from "use-sound"
 import {soundStore} from "@/stores/sound-strore"
 import {observer} from "mobx-react-lite"
+import {motion, useAnimate} from "motion/react"
 
 interface Props {
     className?: string
 }
 
 export const SoundToggle: React.FC<Props> = observer(({className}) => {
+    const [isMuted, setIsMuted] = useState(!soundStore.soundEnabled)
+    const [isAnimating, setIsAnimating] = useState(false)
+
+    const [playOn] = useSound("/sounds/enable-sound.mp3", {volume: 0.4})
+    const [playOff] = useSound("/sounds/disable-sound.mp3", {volume: 0.25})
+
+    const [btnRef, animateBtn] = useAnimate()
+    const [arcsRef, animateArcs] = useAnimate()
+    const [crossRef, animateCross] = useAnimate()
+
     useEffect(() => {
         soundStore.hydrate()
     }, [])
 
-    const [isMuted, setIsMuted] = useState(!soundStore.soundEnabled)
+    const animateToggle = useCallback((muted: boolean) => {
+        if (muted) {
+            animateArcs(arcsRef.current, {
+                opacity: 0,
+                scale: 0
+            }, {duration: 0.4, ease: "easeInOut"})
 
-    const wrapperRef = useRef<HTMLButtonElement>(null)
-    const arcsRef = useRef<SVGGElement>(null)
-    const crossRef = useRef<SVGGElement>(null)
-    const isAnimatingRef = useRef(false)
+            animateCross(crossRef.current, {
+                opacity: 1,
+                scale: 1
+            }, {duration: 0.4, ease: "easeInOut"})
+        } else {
+            animateArcs(arcsRef.current, {
+                opacity: 1,
+                scale: 1
+            }, {duration: 0.4, ease: "easeInOut"})
 
-    const [playOn] = useSound("/sounds/enable-sound.mp3", {
-        volume: 0.4
-    })
-
-    const [playOff] = useSound("/sounds/disable-sound.mp3", {
-        volume: 0.25
-    })
+            animateCross(crossRef.current, {
+                opacity: 0,
+                scale: 0
+            }, {duration: 0.4, ease: "easeInOut"})
+        }
+    }, [animateArcs, animateCross, arcsRef, crossRef])
 
     const handleClick = () => {
-        if (isAnimatingRef.current) return
+        setIsAnimating(true)
 
         if (soundStore.soundEnabled) {
             playOff()
@@ -42,107 +60,74 @@ export const SoundToggle: React.FC<Props> = observer(({className}) => {
             playOn()
         }
 
-        isAnimatingRef.current = true
+        animateBtn(btnRef.current, {
+            scale: [1, 1.3, 0.9, 1],
+            rotate: [0, -10, 5, 0]
+        }, {duration: 0.5, ease: "easeInOut"})
 
-        if (wrapperRef.current) {
-            animate(wrapperRef.current, {
-                transform: [
-                    "scale(1) rotate(0deg)",
-                    "scale(1.3) rotate(-10deg)",
-                    "scale(0.9) rotate(5deg)",
-                    "scale(1) rotate(0deg)"
-                ]
-            }, {
-                duration: 0.6,
-                ease: "easeInOut",
-                onComplete: () => {
-                    isAnimatingRef.current = false
-                }
-            })
-        }
+        animateToggle(!isMuted)
 
-        if (arcsRef.current && crossRef.current) {
-            if (!isMuted) {
-                animate(arcsRef.current, {opacity: 0, scale: 0}, {duration: 0.5, ease: "easeInOut"})
-                animate(crossRef.current, {opacity: 1, scale: 1}, {duration: 0.5, ease: "easeInOut"})
-            } else {
-                animate(arcsRef.current, {opacity: 1, scale: 1}, {duration: 0.5, ease: "easeInOut"})
-                animate(crossRef.current, {opacity: 0, scale: 0}, {duration: 0.5, ease: "easeInOut"})
-            }
-        }
-
-        setIsMuted(!isMuted)
+        setIsMuted(prev => !prev)
+        setTimeout(() => setIsAnimating(false), 500)
 
         soundStore.toggleSound()
     }
 
     const handleHover = () => {
-        if (isAnimatingRef.current) return
+        if (isAnimating) return
 
-        if (wrapperRef.current) {
-            animate(wrapperRef.current, {
-                transform: [
-                    "rotate(0deg)",
-                    "rotate(-6deg)",
-                    "rotate(4deg)",
-                    "rotate(-2deg)",
-                    "rotate(0deg)"
-                ]
-            }, {duration: 0.5, ease: "easeInOut"})
-        }
+        animateBtn(btnRef.current, {
+            rotate: [0, -6, 4, -2, 0]
+        }, {duration: 0.5, ease: "easeInOut"})
     }
 
     return (
-        <button
-            ref={wrapperRef}
+        <motion.button
+            ref={btnRef}
             onClick={handleClick}
             onMouseEnter={handleHover}
             aria-label={isMuted ? "Sound on" : "Sound off"}
-            className={cn(className,
-                "w-8 h-8 relative flex items-center justify-center select-none transition-opacity duration-300 ease-in-out hover:opacity-80"
+            className={cn(
+                className,
+                "w-8 h-8 relative flex items-center justify-center select-none transition-opacity duration-300 " +
+                "ease-in-out hover:opacity-80 cursor-pointer"
             )}
         >
             <Volume/>
 
-            <svg
+            <motion.svg
                 width={32}
                 height={32}
                 viewBox={"0 0 32 32"}
                 fill={"none"}
                 className={"absolute top-1/2 left-2 -translate-y-1/2 pointer-events-none text-current w-8 h-8"}
             >
-                <g
+                <motion.g
                     ref={arcsRef}
-                    opacity={isMuted ? 0 : 1}
+                    initial={{opacity: isMuted ? 0 : 1, scale: isMuted ? 0 : 1}}
                     stroke={"currentColor"}
                     strokeWidth={2}
                     strokeLinecap={"round"}
                     strokeLinejoin={"round"}
-                    className={clsx("origin-[1rem_1rem]", {
-                        "scale-0": isMuted,
-                        "scale-100": !isMuted
-                    })}
+                    className={"origin-[1rem_1rem]"}
                 >
                     <path d={"M13 12C15 14 15 18 13 20"}/>
                     <path d={"M17 10C20 13 20 19 17 22"}/>
-                </g>
+                </motion.g>
 
-                <g
+                <motion.g
                     ref={crossRef}
-                    opacity={isMuted ? 1 : 0}
+                    initial={{opacity: isMuted ? 1 : 0, scale: isMuted ? 1 : 0}}
                     stroke={"currentColor"}
                     strokeWidth={2}
                     strokeLinecap={"round"}
                     strokeLinejoin={"round"}
-                    className={clsx("origin-[1rem_1rem]", {
-                        "scale-100": isMuted,
-                        "scale-0": !isMuted
-                    })}
+                    className={"origin-[1rem_1rem]"}
                 >
                     <line x1={13} y1={12} x2={21} y2={20}/>
                     <line x1={21} y1={12} x2={13} y2={20}/>
-                </g>
-            </svg>
-        </button>
+                </motion.g>
+            </motion.svg>
+        </motion.button>
     )
 })
