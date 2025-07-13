@@ -119,6 +119,7 @@ export const Header: React.FC<Props> = observer(({className}) => {
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
                             className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}
+                            style={{color: "var(--foreground)"}}
                         >
                             Home
                         </NavigationMenuTrigger>
@@ -129,7 +130,7 @@ export const Header: React.FC<Props> = observer(({className}) => {
                                     <NavigationMenuLink asChild>
                                         <Link
                                             className={
-                                                "from-muted/50 to-muted flex h-full w-full flex-col justify-center " +
+                                                "from-muted/50 to-accent flex h-full w-full flex-col justify-center " +
                                                 "items-center rounded-md bg-linear-to-b p-4 no-underline outline-hidden " +
                                                 "select-none focus:shadow-md"
                                             }
@@ -142,7 +143,7 @@ export const Header: React.FC<Props> = observer(({className}) => {
                                                 height={100}
                                             />
 
-                                            <div className={"mt-2 mb-2 text-lg font-medium text-center"}>
+                                            <div className={"mt-2 mb-2 text-lg font-medium text-center text-foreground"}>
                                                 kazuha046
                                             </div>
 
@@ -171,6 +172,7 @@ export const Header: React.FC<Props> = observer(({className}) => {
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
                             className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}
+                            style={{color: "var(--foreground)"}}
                         >
                             Goodies
                         </NavigationMenuTrigger>
@@ -193,6 +195,7 @@ export const Header: React.FC<Props> = observer(({className}) => {
                     <NavigationMenuItem>
                         <NavigationMenuTrigger
                             className={"bg-transparent text-inherit hover:bg-transparent focus:bg-transparent focus:ring-0"}
+                            style={{color: "var(--foreground)"}}
                         >
                             Categories
                         </NavigationMenuTrigger>
@@ -245,7 +248,7 @@ function ListItem(
         <li {...props}>
             <NavigationMenuLink asChild>
                 <Link href={href}>
-                    <div className={"text-sm leading-none font-medium"}>{title}</div>
+                    <div className={"text-sm leading-none font-medium text-foreground"}>{title}</div>
 
                     <p className={"text-muted-foreground line-clamp-2 text-sm leading-snug"}>
                         {children}
