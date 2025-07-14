@@ -43,7 +43,12 @@ export default observer(function HomePage() {
 
     return (
         <section className={"grid grid-cols-1 xl:grid-cols-[40%_60%] min-h-screen bg-parted"}>
-            <div className={"hidden relative xl:flex flex-col items-center justify-center py-12 w-full h-full"}>
+            <motion.div
+                className={"hidden relative xl:flex flex-col items-center justify-center py-12 w-full h-full"}
+                initial={{clipPath: "inset(100% 0 0 0)", y: 50, opacity: 0}}
+                animate={{clipPath: "inset(0% 0 0 0)", y: 0, opacity: 100}}
+                transition={{duration: 1, ease: "easeOut"}}
+            >
                 <div className={"absolute inset-0 overflow-hidden z-[-1]"}>
                     {Array.from({length: 25}).map((_, i) => (
                         <FloatingDots
@@ -72,10 +77,15 @@ export default observer(function HomePage() {
                         </Button>
                     </Link>
                 </div>
-            </div>
+            </motion.div>
 
             <div className={"w-full h-full flex flex-col justify-center items-center relative"}>
-                <div className={"w-full max-w-[26rem] md:max-w-[43rem] space-y-2 md:space-y-6"}>
+                <motion.div
+                    className={"flex flex-col justify-center h-full w-full max-w-[26rem] md:max-w-[43rem] space-y-2 md:space-y-6"}
+                    initial={{clipPath: "inset(0% 0% 100% 0%)", y: -50, opacity: 0}}
+                    animate={{clipPath: "inset(0% 0% 0% 0%)", y: 0, opacity: 100}}
+                    transition={{delay: 0.4, duration: 1.2, ease: "backInOut"}}
+                >
                     <motion.h2
                         className={"text-3xl md:text-4xl font-bold font-fascinate flex gap-2 items-center origin-left"}
                         ref={scope}
@@ -123,14 +133,20 @@ export default observer(function HomePage() {
                             cursor={true}
                         />
                     </h2>
-                </div>
+                </motion.div>
 
-                <h2 className={
-                    "hidden sm:block text-md lg:text-xl 2xl:text-2xl absolute bottom-10 right-10 text-right leading-3.5 lg:leading-4.5 2xl:leading-5.5"
-                }>
+                <motion.h2
+                    className={
+                        "hidden sm:block text-md lg:text-xl 2xl:text-2xl absolute bottom-10 right-10 text-right " +
+                        "leading-3.5 lg:leading-4.5 2xl:leading-5.5"
+                    }
+                    initial={{opacity: 0, y: 50}}
+                    animate={{opacity: 1, y: 0}}
+                    transition={{delay: 0.8, duration: 0.8, ease: "backInOut"}}
+                >
                     I&apos;m building my future line by line — and I can <br/>
                     help build something awesome for you too
-                </h2>
+                </motion.h2>
             </div>
         </section>
     )

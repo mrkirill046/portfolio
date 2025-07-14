@@ -207,31 +207,27 @@
 @layer base {
     * {
         @apply border-border outline-ring/50;
-
-        scrollbar-width: thin;
-        scrollbar-color: var(--scrollbar-color);
-        transition: scrollbar-color 0.3s ease-in-out;
     }
 
     html {
         scroll-behavior: smooth;
         width: 100%;
+        transition: scrollbar-color 0.3s ease-in-out;
     }
 
     ::-webkit-scrollbar {
-        width: 0.625rem;
-        height: 0.625rem;
-        border-radius: 0.3125rem;
+        width: 0.5rem;
+        border: none;
     }
 
     ::-webkit-scrollbar-track {
-        background: var(--background-color);
-        border-radius: 0.3125rem;
+        border: none;
     }
 
     ::-webkit-scrollbar-thumb {
-        background: var(--block-color-alt);
-        border-radius: 0.3125rem;
+        border: none;
+        background-color: var(--accent);
+        border-radius: 0.25rem;
     }
 
     body {
