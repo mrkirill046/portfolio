@@ -154,12 +154,12 @@ export const Header: React.FC<Props> = observer(({className}) => {
                                     </NavigationMenuLink>
                                 </li>
 
-                                <ListItem href={"/#projects"} title={"Projects"}>
-                                    Explore real-world applications built with Next.js and Java Spring Boot.
-                                </ListItem>
-
                                 <ListItem href={"/#about"} title={"About Me"}>
                                     Learn more about my background, tech stack, and development journey.
+                                </ListItem>
+
+                                <ListItem href={"/#projects"} title={"Projects"}>
+                                    Explore real-world applications built with Next.js and Java Spring Boot.
                                 </ListItem>
 
                                 <ListItem href={"/#contact"} title={"Contact"}>

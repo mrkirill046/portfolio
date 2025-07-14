@@ -34,9 +34,10 @@ export const FloatingDots: React.FC<Props> = ({size, className}) => {
                 x: offsetX,
                 y: offsetY
             }, {
-                duration: 6 + Math.random() * 6,
-                ease: "easeInOut",
-                onComplete: float
+                duration: 10 + Math.random() * 10,
+                ease: "linear",
+                repeat: Infinity,
+                repeatDelay: 0
             })
         }
 
@@ -46,15 +47,13 @@ export const FloatingDots: React.FC<Props> = ({size, className}) => {
     return (
         <motion.div
             ref={scope}
-            className={cn("absolute rounded-full pointer-events-none", className)}
+            className={cn(className, "absolute rounded-full pointer-events-none z-[-5] opacity-60")}
             suppressHydrationWarning
             style={{
                 width: size,
                 height: size,
-                zIndex: -5,
                 top: initialPos.top,
-                left: initialPos.left,
-                opacity: 0.15
+                left: initialPos.left
             }}
         />
     )

@@ -20,7 +20,7 @@ export const ThemeToggle: React.FC<Props> = observer((
         svgStyle = "transition-opacity duration-300 ease-in-out hover:opacity-80 select-none"
     }
 ) => {
-    const {setTheme, resolvedTheme} = useTheme()
+    const {resolvedTheme, setTheme} = useTheme()
 
     const [mounted, setMounted] = useState(false)
     const [isAnimating, setIsAnimating] = useState(false)

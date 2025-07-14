@@ -33,6 +33,10 @@
     --color-border: var(--border);
     --color-destructive: var(--destructive);
 
+    --color-lamp: var(--lamp);
+    --color-lamp-foreground: var(--lamp-foreground);
+    --color-lamp-secondary-foreground: var(--lamp-secondary-foreground);
+
     --color-accent-foreground: var(--accent-foreground);
     --color-accent: var(--accent);
 
@@ -89,6 +93,10 @@
     --input: oklch(0.88 0.01 260);
     --ring: oklch(0.48 0 260);
 
+    --lamp: oklch(0.642 0.036 241.384);
+    --lamp-foreground: oklch(0.65 0.02 240);
+    --lamp-secondary-foreground: oklch(0.50 0.01 220);
+
     --chart-1: oklch(0.646 0.222 41.116);
     --chart-2: oklch(0.6 0.118 184.704);
     --chart-3: oklch(0.398 0.07 227.392);
@@ -133,6 +141,10 @@
     --border: oklch(0.06 0.02 240 / 12%);
     --input: oklch(0.07 0.02 240 / 10%);
     --ring: oklch(0.18 0.03 240);
+
+    --lamp: oklch(0.5 0 260);
+    --lamp-foreground: oklch(0.38 0 260);
+    --lamp-secondary-foreground: oklch(0.38 0 260);
 
     --chart-1: oklch(0.488 0.243 264.376);
     --chart-2: oklch(0.696 0.17 162.48);
@@ -182,6 +194,12 @@
     @media (hover: none) {
         .text-outline:active {
             color: var(--foreground);
+        }
+    }
+
+    @media (max-width: 1279px) {
+        .bg-parted {
+            background-color: var(--accent);
         }
     }
 }
