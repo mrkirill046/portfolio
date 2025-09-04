@@ -105,7 +105,7 @@ export const Header: React.FC<Props> = observer(({className}) => {
         <header className={cn(className,
             "fixed top-0 left-0 right-0 z-30 flex items-center px-4 py-3 pb-4 pt-4 backdrop-blur-lg bg-background/80 drop-shadow-lg"
         )}>
-            <div className="flex items-center flex-shrink-0">
+            <div className={"flex items-center flex-shrink-0"}>
                 <MobileMenu className={"flex lg:hidden"}/>
             </div>
 
@@ -221,8 +221,8 @@ export const Header: React.FC<Props> = observer(({className}) => {
                 "sm:absolute sm:left-1/2 sm:top-1/2 sm:transform sm:-translate-x-1/2 sm:-translate-y-1/2 pointer-events-none select-none " +
                 "flex-grow flex justify-center text-center"
             }>
-                <h1 className={"text-lg sm:text-xl font-bold uppercase md:text-2xl sm:whitespace-nowrap leading-4 sm:leading-none"}>
-                    kazuha046 portfolio
+                <h1 className={"text-lg sm:text-xl font-bold uppercase md:text-2xl sm:whitespace-nowrap leading-4 sm:leading-none flex gap-2"}>
+                    kazuha046 <span className={"hidden sm:block"}>portfolio</span>
                 </h1>
             </div>
 

@@ -25,12 +25,14 @@ const words = [
 
 export default observer(function HomePage() {
     const [scope, animate] = useAnimate()
+
     const [play, {stop}] = useSound("/sounds/rising-pops.mp3", {soundEnabled: soundStore.soundEnabled, volume: 0.5})
 
     useEffect(() => {
         animate(scope.current, {rotate: [0, -5, 5, -5, 5, 0]}, {
             duration: 0.8,
-            ease: "easeInOut"
+            ease: "easeInOut",
+            delay: 1.6
         })
     }, [animate, scope])
 
@@ -81,13 +83,13 @@ export default observer(function HomePage() {
 
             <div className={"w-full h-full flex flex-col justify-center items-center relative"}>
                 <motion.div
-                    className={"flex flex-col justify-center h-full w-full max-w-[26rem] md:max-w-[43rem] space-y-2 md:space-y-6"}
+                    className={"flex text-center sm:text-left flex-col justify-center h-full w-full max-w-[26rem] md:max-w-[43rem] space-y-2 md:space-y-6"}
                     initial={{clipPath: "inset(0% 0% 100% 0%)", y: -50, opacity: 0}}
                     animate={{clipPath: "inset(0% 0% 0% 0%)", y: 0, opacity: 100}}
                     transition={{delay: 0.4, duration: 1.2, ease: "backInOut"}}
                 >
                     <motion.h2
-                        className={"text-3xl md:text-4xl font-bold font-fascinate flex gap-2 items-center origin-left"}
+                        className={"justify-center sm:justify-start text-2xl md:text-4xl font-bold font-fascinate flex gap-2 items-center origin-left"}
                         ref={scope}
                     >
                         <motion.span
@@ -103,7 +105,7 @@ export default observer(function HomePage() {
                         <span>Hey! I&apos;m Kirill</span>
                     </motion.h2>
 
-                    <h2 className={"text-4xl md:text-6xl font-bold"}>
+                    <h2 className={"text-3xl md:text-6xl font-bold"}>
                         <span>I&apos;m a </span>
 
                         <PhysicsText
@@ -123,7 +125,7 @@ export default observer(function HomePage() {
                         </span>
                     </h2>
 
-                    <h2 className={"md:text-xl mt-3 md:mt-10 tsm:ext-nowrap"}>
+                    <h2 className={"md:text-xl text-sm mt-3 md:mt-10 tsm:ext-nowrap"}>
                         I build for the web with&nbsp;
 
                         <Typewriter
